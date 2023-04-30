@@ -2,11 +2,14 @@ package instagram.downloader.com.newsapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 
 import com.squareup.picasso.Picasso;
 
@@ -21,6 +24,7 @@ import java.util.Locale;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import instagram.downloader.com.newsapp.Model.Articles;
+
 
 /**
  * Created by Евгений on 17.04.2023.
@@ -44,26 +48,39 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public void onBindViewHolder(Adapter.ViewHolder holder, int position) {
         final Articles a = articles.get(position);
-        String imageUrl = a.getUrlToImage();
+
+
+         String imageUrl = a.getUrlToImage();
         String url = a.getUrl();
-        Picasso.get().load(imageUrl).into(holder.imageView);
+        Log.i("Изображение", url);
+        // Log.i("Изображения 2", url);
+        //Target must not be null. Glide іспользовать
+         Picasso.with(context)
+
+
+                 .load(url)
+
+
+                 .into(holder.imageView);
 
 
         holder.tvTitle.setText(a.getTitle());
-        holder.tvSource.setText(a.getSource().getName());
+        // holder.tvSource.setText(a.getSource().getName());
         holder.tvDate.setText("\u2022" + dateTime(a.getPublishedAt()));
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, detailed.class);
                 intent.putExtra("title", a.getTitle());
-                intent.putExtra("source", a.getSource().getName());
+//                intent.putExtra("source", a.getSource().getName());
                 intent.putExtra("time", dateTime(a.getPublishedAt()));
+                // intent.putExtra("desc", a.getDescription());
                 intent.putExtra("imageUrl", a.getUrlToImage());
                 intent.putExtra("url", a.getUrl());
                 context.startActivity(intent);
             }
         });
+
 
     }
 
@@ -84,8 +101,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvSource = itemView.findViewById(R.id.tvSource);
             tvDate = itemView.findViewById(R.id.tvDate);
-            imageView = itemView.findViewById(R.id.image);
+            imageView = itemView.findViewById(R.id.imageView);
             cardView = itemView.findViewById(R.id.cardView);
+            imageView.setMaxWidth(200);
+            imageView.setMaxHeight(100);
         }
     }
 
@@ -105,14 +124,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
 
+    public String getCountry() {
+       // Locale locale = Locale.US;
+        //String country = locale.getCountry();
 
-        public String getCountry()
-        {
-            Locale locale = Locale.getDefault();
-            String country = locale.getCountry();
-            return country.toLowerCase();
-        }
-
-
+        String country = "lt";
+        return country.toLowerCase();
     }
+
+
+}
 

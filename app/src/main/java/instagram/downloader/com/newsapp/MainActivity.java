@@ -2,6 +2,9 @@ package instagram.downloader.com.newsapp;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,28 +28,50 @@ public class MainActivity extends AppCompatActivity {
     Adapter adapter;
     List<Articles> articles = new ArrayList<>();
     SwipeRefreshLayout swipeRefreshLayout;
+    EditText etQuery;
+    Button btnSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        etQuery = findViewById(R.id.etQuery);
+        btnSearch = findViewById(R.id.btnSearch);
+
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         final String country = getCountry();
-        retrieveJson(country, API_KEY);
-        swipeRefreshLayout = findViewById(R.id.swipeRefresh);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        retrieveJson("", country, API_KEY);
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onRefresh() {
-                retrieveJson(country, API_KEY);
+            public void onClick(View view) {
+                if (etQuery.getText().toString().equals("")) {
+                    retrieveJson(etQuery.getText().toString(), country, API_KEY);
+                    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                 @Override
+               public void onRefresh() {
+              retrieveJson("", country, API_KEY);}}
+                    );
+                    retrieveJson("", country, API_KEY);
+                } else {
+                    retrieveJson("", country, API_KEY);
+                }
             }
         });
     }
 
 
-    private void retrieveJson(String country, String apiKey) {
+    private void retrieveJson(String query, String country, String apiKey) {
         swipeRefreshLayout.setRefreshing(true);
-        Call<Headlines> call = ApiClient.getApiClient().getApi().getHeadlines(country, apiKey);
+        Call<Headlines> call;
+        if (!etQuery.getText().toString().equals("")) {
+            call = ApiClient.getApiClient().getApi().getSpecificData(query, apiKey);
+        } else {
+            call = ApiClient.getApiClient().getApi().getHeadlines(country, apiKey);
+        }
         call.enqueue(new Callback<Headlines>() {
             @Override
             public void onResponse(Call<Headlines> call, Response<Headlines> response) {
@@ -78,8 +103,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getCountry() {
-        Locale locale = Locale.getDefault();
-        String country = locale.getCountry();
+        //Locale locale = Locale.US;
+       // String country = locale.getCountry();
+
+        String country = "lt";
+
         return country.toLowerCase();
     }
 }

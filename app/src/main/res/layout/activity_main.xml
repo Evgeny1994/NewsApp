@@ -32,7 +32,7 @@
         android:rowCount="2">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/etQuery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -48,7 +48,7 @@
         android:inputType="textPersonName"/>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/black_background"
@@ -59,7 +59,7 @@
     </GridLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefresh"
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

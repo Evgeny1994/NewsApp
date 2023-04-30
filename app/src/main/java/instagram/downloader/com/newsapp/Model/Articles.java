@@ -23,9 +23,14 @@ public class Articles {
     @Expose
     private String title;
 
+    //было
+//    @SerializedName("description")
+//    @Expose
+//    private Source description;
+
     @SerializedName("description")
     @Expose
-    private Source description;
+    private String description;
 
     @SerializedName("urlToImage")
     @Expose
@@ -35,10 +40,11 @@ public class Articles {
     @Expose
     private String publishedAt;
 
+
+
     @SerializedName("url")
     @Expose
     private String url;
-
 
     public String getUrl() {
         return url;
@@ -47,6 +53,8 @@ public class Articles {
     public void setUrl(String url) {
         this.url = url;
     }
+
+
 
     public Source getSource() {
         return source;
@@ -72,11 +80,11 @@ public class Articles {
         this.title = title;
     }
 
-    public Source getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(Source description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
