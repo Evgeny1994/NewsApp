@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -49,23 +49,17 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public void onBindViewHolder(Adapter.ViewHolder holder, int position) {
         final Articles a = articles.get(position);
 
-
-         String imageUrl = a.getUrlToImage();
+        String imageUrl = a.getUrlToImage();
         String url = a.getUrl();
-        Log.i("Изображение", url);
-        // Log.i("Изображения 2", url);
-        //Target must not be null. Glide іспользовать
-         Picasso.with(context)
 
 
-                 .load(url)
-
-
-                 .into(holder.imageView);
+        Glide.with(context)
+                .load(imageUrl)
+                .into(holder.imageView);
 
 
         holder.tvTitle.setText(a.getTitle());
-        // holder.tvSource.setText(a.getSource().getName());
+        holder.tvSource.setText(a.getSource().getName());
         holder.tvDate.setText("\u2022" + dateTime(a.getPublishedAt()));
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,10 +119,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
 
     public String getCountry() {
-       // Locale locale = Locale.US;
+        //Locale locale = Locale.getDefault();
         //String country = locale.getCountry();
 
-        String country = "lt";
+        String country = "us";
         return country.toLowerCase();
     }
 

@@ -36,8 +36,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
     //Date/Time
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
-    //Picasso for image url
-    implementation 'com.squareup.picasso:picasso:2.5.0'
+    //Glide for image url
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

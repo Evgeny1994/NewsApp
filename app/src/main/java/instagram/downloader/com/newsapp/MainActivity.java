@@ -24,7 +24,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    final String API_KEY = "3dc047ec562a48819963a6d8a6a6f29c";
+    final String API_KEY = "YOU ARE REQUEST API";
     Adapter adapter;
     List<Articles> articles = new ArrayList<>();
     SwipeRefreshLayout swipeRefreshLayout;
@@ -45,18 +45,34 @@ public class MainActivity extends AppCompatActivity {
         final String country = getCountry();
         retrieveJson("", country, API_KEY);
 
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                retrieveJson("",country,API_KEY);
+            }
+        });
+        retrieveJson("",country,API_KEY);
+
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (etQuery.getText().toString().equals("")) {
-                    retrieveJson(etQuery.getText().toString(), country, API_KEY);
                     swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                 @Override
-               public void onRefresh() {
-              retrieveJson("", country, API_KEY);}}
+                                                                @Override
+                                                                public void onRefresh() {
+                                                                    retrieveJson(etQuery.getText().toString(), country, API_KEY);
+                                                                }
+                                                            }
                     );
-                    retrieveJson("", country, API_KEY);
+                    retrieveJson(etQuery.getText().toString(), country, API_KEY);
                 } else {
+                    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            retrieveJson("", country, API_KEY);
+                        }
+                    });
                     retrieveJson("", country, API_KEY);
                 }
             }
@@ -75,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<Headlines>() {
             @Override
             public void onResponse(Call<Headlines> call, Response<Headlines> response) {
-                swipeRefreshLayout.setRefreshing(false);
+               // swipeRefreshLayout.setRefreshing(false);
                 if (response.isSuccessful() && response.body().getArticles() != null) {
                     articles.clear();
                     articles = response.body().getArticles();
@@ -83,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     recyclerView.setAdapter(adapter);
                 } else {
 
-                    Log.i("error", String.valueOf(response.code()));
+                    Log.i("error", String.valueOf(response.message()));
                 }
 
             }
@@ -91,9 +107,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(retrofit2.Call<Headlines> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-
-
-                Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
 
@@ -103,10 +117,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getCountry() {
-        //Locale locale = Locale.US;
-       // String country = locale.getCountry();
+        //Locale locale = Locale.getDefault();
+        //String country = locale.getCountry();
 
-        String country = "lt";
+        String country = "us";
 
         return country.toLowerCase();
     }

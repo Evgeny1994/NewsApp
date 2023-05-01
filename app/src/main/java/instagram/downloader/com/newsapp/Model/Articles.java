@@ -10,7 +10,8 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Articles {
-    @SerializedName("Source")
+
+    @SerializedName("source")
     @Expose
     private Source source;
 
@@ -23,10 +24,7 @@ public class Articles {
     @Expose
     private String title;
 
-    //было
-//    @SerializedName("description")
-//    @Expose
-//    private Source description;
+
 
     @SerializedName("description")
     @Expose
