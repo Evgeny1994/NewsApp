@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -24,104 +26,43 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    final String API_KEY = "YOU ARE REQUEST API";
+    final String api_key = "4030c487dc1c57df4d4df48097cd7471a7801d16";
+    final String country = "US";
+    final Integer year = 2019;
     Adapter adapter;
     List<Articles> articles = new ArrayList<>();
-    SwipeRefreshLayout swipeRefreshLayout;
-    EditText etQuery;
-    Button btnSearch;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        etQuery = findViewById(R.id.etQuery);
-        btnSearch = findViewById(R.id.btnSearch);
-
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        final String country = getCountry();
-        retrieveJson("", country, API_KEY);
-
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                retrieveJson("",country,API_KEY);
-            }
-        });
-        retrieveJson("",country,API_KEY);
-
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (etQuery.getText().toString().equals("")) {
-                    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                                                                @Override
-                                                                public void onRefresh() {
-                                                                    retrieveJson(etQuery.getText().toString(), country, API_KEY);
-                                                                }
-                                                            }
-                    );
-                    retrieveJson(etQuery.getText().toString(), country, API_KEY);
-                } else {
-                    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                        @Override
-                        public void onRefresh() {
-                            retrieveJson("", country, API_KEY);
-                        }
-                    });
-                    retrieveJson("", country, API_KEY);
-                }
-            }
-        });
+        retrieveJson(api_key, country, year);
     }
 
 
-    private void retrieveJson(String query, String country, String apiKey) {
-        swipeRefreshLayout.setRefreshing(true);
-        Call<Headlines> call;
-        if (!etQuery.getText().toString().equals("")) {
-            call = ApiClient.getApiClient().getApi().getSpecificData(query, apiKey);
-        } else {
-            call = ApiClient.getApiClient().getApi().getHeadlines(country, apiKey);
-        }
+    private void retrieveJson(String api_key, String country, Integer year) {
+        Call<Headlines> call = ApiClient.getApiClient().getApi().getHeadlines(api_key, country, year);
         call.enqueue(new Callback<Headlines>() {
             @Override
             public void onResponse(Call<Headlines> call, Response<Headlines> response) {
-               // swipeRefreshLayout.setRefreshing(false);
                 if (response.isSuccessful() && response.body().getArticles() != null) {
                     articles.clear();
                     articles = response.body().getArticles();
                     adapter = new Adapter(MainActivity.this, articles);
                     recyclerView.setAdapter(adapter);
                 } else {
-
+                    System.out.println(call.request());
                     Log.i("error", String.valueOf(response.message()));
                 }
-
             }
 
             @Override
             public void onFailure(retrofit2.Call<Headlines> call, Throwable t) {
-                swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-
             }
-
-
         });
-
-    }
-
-    private String getCountry() {
-        //Locale locale = Locale.getDefault();
-        //String country = locale.getCountry();
-
-        String country = "us";
-
-        return country.toLowerCase();
     }
 }

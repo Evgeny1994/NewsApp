@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import javax.xml.transform.*;
+import javax.xml.transform.Source;
+
 /**
  * Created by Евгений on 17.04.2023.
  */
@@ -14,9 +17,17 @@ public class Headlines {
     @Expose
     private String status;
 
-    @SerializedName("totalResults")
+    @SerializedName("description")
     @Expose
-    private String totalResults;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     @SerializedName("articles")
     @Expose
@@ -30,13 +41,8 @@ public class Headlines {
         this.status = status;
     }
 
-    public String getTotalResults() {
-        return totalResults;
-    }
 
-    public void setTotalResults(String totalResults) {
-        this.totalResults = totalResults;
-    }
+
 
     public List<Articles> getArticles() {
         return articles;

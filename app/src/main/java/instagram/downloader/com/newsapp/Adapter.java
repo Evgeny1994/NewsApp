@@ -2,8 +2,6 @@ package instagram.downloader.com.newsapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,32 +46,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public void onBindViewHolder(Adapter.ViewHolder holder, int position) {
         final Articles a = articles.get(position);
+        //holder.tvTitle.setText(a.getTitle());
 
-        String imageUrl = a.getUrlToImage();
-        String url = a.getUrl();
-
-
-        Glide.with(context)
-                .load(imageUrl)
-                .into(holder.imageView);
-
-
-        holder.tvTitle.setText(a.getTitle());
-        holder.tvSource.setText(a.getSource().getName());
-        holder.tvDate.setText("\u2022" + dateTime(a.getPublishedAt()));
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, detailed.class);
-                intent.putExtra("title", a.getTitle());
-//                intent.putExtra("source", a.getSource().getName());
-                intent.putExtra("time", dateTime(a.getPublishedAt()));
-                // intent.putExtra("desc", a.getDescription());
-                intent.putExtra("imageUrl", a.getUrlToImage());
-                intent.putExtra("url", a.getUrl());
-                context.startActivity(intent);
-            }
-        });
 
 
     }
@@ -85,20 +59,16 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvSource, tvDate;
-        ImageView imageView;
-        CardView cardView;
+        TextView cityName, tempValue, pressureValue, timeSunrise, timeSunrisezah;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvSource = itemView.findViewById(R.id.tvSource);
-            tvDate = itemView.findViewById(R.id.tvDate);
-            imageView = itemView.findViewById(R.id.imageView);
-            cardView = itemView.findViewById(R.id.cardView);
-            imageView.setMaxWidth(200);
-            imageView.setMaxHeight(100);
+            cityName = itemView.findViewById(R.id.cityName);
+            tempValue = itemView.findViewById(R.id.tempValue);
+            pressureValue = itemView.findViewById(R.id.pressureValue);
+            timeSunrise = itemView.findViewById(R.id.timeSunrise);
+            timeSunrisezah = itemView.findViewById(R.id.timeSunrisezah);
         }
     }
 

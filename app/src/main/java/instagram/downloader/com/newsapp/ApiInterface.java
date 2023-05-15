@@ -10,16 +10,11 @@ import retrofit2.http.Query;
  */
 
 public interface ApiInterface {
-    @GET("top-headlines")
+    @GET("holidays")
     Call<Headlines> getHeadlines(
+            @Query("api_key") String api_key,
             @Query("country") String country,
-            @Query("apiKey") String apiKey
-    );
-
-    @GET("everything")
-    Call<Headlines> getSpecificData(
-            @Query("q") String country,
-            @Query("apiKey") String apiKey
+            @Query("year") Integer year
     );
 
 
